@@ -20,7 +20,7 @@ app.set('view engine','ejs') //name must be "ejs" here
 
 //We are telling our app to use session package with some initial configuration
 app.use(session({
-  secret: 'keyboard cat',
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: false,
   //cookie: { secure: false }
@@ -39,7 +39,6 @@ passport.use(new GoogleStrategy({
   scope:['profile']
 }, async (accessToken, refreshToken, profile, done) => {
   try {
-    console.log(profile)
     let user = await User.findOne({ googleId: profile.id });
     if (user) {
       return done(null, user);
